@@ -84,7 +84,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue';
+import { markRaw, onMounted, reactive, ref } from 'vue';
 import ListCard from './components/ListCard.vue';
 import { CodeComponentType, EImageType } from './interface';
 import EImage from './components/EImage.vue';
@@ -99,7 +99,16 @@ onMounted(() => {
   selectItem.value = BaseList[0];
 });
 
-const selectItem = ref<CodeComponentType>();
+const selectItem = ref<CodeComponentType>({
+  title: 'tooltip',
+  t_type: 't-button',
+  image: 'https://tdesign.gtimg.com/site/doc/doc-tooltip.png',
+  data: {
+    url: 'https://tdesign.gtimg.com/demo/demo-image-1.png',
+    width: 120,
+    height: 120,
+  } as EImageType,
+});
 const chooseItem = (item: CodeComponentType) => {
   selectItem.value = item;
   console.log(item.data);
@@ -142,7 +151,7 @@ const DesList: CodeComponentType[] = [
   },
   {
     title: 'image',
-    t_type: 'EImage',
+    t_type: markRaw(EImage),
     image: 'https://tdesign.gtimg.com/demo/demo-image-1.png',
     data: {
       url: 'https://tdesign.gtimg.com/demo/demo-image-1.png',

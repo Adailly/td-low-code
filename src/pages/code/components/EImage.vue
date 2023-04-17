@@ -1,9 +1,7 @@
 <template>
-  <t-image
-    src="https://tdesign.gtimg.com/demo/demo-image-1.png"
-    fit="cover"
-    :style="{ width: '120px', height: '120px' }"
-  />
+  <div>
+    <t-image :src="data.url" fit="cover" :style="{ width: `${data.width}px`, height: `${data.height}px` }" />
+  </div>
 </template>
 
 <script setup lang="ts">
