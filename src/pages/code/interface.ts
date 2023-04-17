@@ -9,4 +9,11 @@ export interface CodeComponentType {
   t_type?: string; // 组建类型:使用TDesign类型名
   image?: string; // 组件样式
   propertyJson?: JsonObject; // 属性对象
+  data?: any;
+}
+
+export interface EImageType {
+  url: string;
+  width: number;
+  height: number;
 }

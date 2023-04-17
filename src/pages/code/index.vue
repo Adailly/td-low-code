@@ -50,7 +50,7 @@
       </ListCard>
     </div>
     <div class="div-opr">
-      <t-input></t-input>
+      <component :is="selectItem?.t_type" :data="selectItem?.data"></component>
     </div>
     <div class="div-pro">
       <div>属性编辑</div>
@@ -59,6 +59,25 @@
         <div>已选择:</div>
         <div>组件名: {{ selectItem?.title }}</div>
         <div>组件类型: {{ selectItem?.t_type }}</div>
+
+        <div>
+          图片地址:
+          <t-input type="url" placeholder="请输入图片地址" v-model.trim="selectItem.data.url">{{
+            selectItem.data.url
+          }}</t-input>
+        </div>
+        <div>
+          图片宽度:
+          <t-input type="number" placeholder="请输入图片地址" v-model.trim="selectItem.data.width">{{
+            selectItem.data.width
+          }}</t-input>
+        </div>
+        <div>
+          图片高度:
+          <t-input type="number" placeholder="请输入图片地址" v-model.trim="selectItem.data.height">{{
+            selectItem.data.height
+          }}</t-input>
+        </div>
       </t-space>
     </div>
   </div>
@@ -67,7 +86,8 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue';
 import ListCard from './components/ListCard.vue';
-import { CodeComponentType } from './interface';
+import { CodeComponentType, EImageType } from './interface';
+import EImage from './components/EImage.vue';
 
 const data = reactive({
   baseTitle: '基础组件',
@@ -75,11 +95,14 @@ const data = reactive({
   desTitle: '描述组件',
 });
 
-onMounted(() => {});
+onMounted(() => {
+  selectItem.value = BaseList[0];
+});
 
 const selectItem = ref<CodeComponentType>();
 const chooseItem = (item: CodeComponentType) => {
   selectItem.value = item;
+  console.log(item.data);
 };
 
 const BaseList: CodeComponentType[] = [
@@ -87,6 +110,11 @@ const BaseList: CodeComponentType[] = [
     title: 'button',
     t_type: 't-button',
     image: 'https://tdesign.gtimg.com/site/doc/doc-button.png',
+    data: {
+      url: 'https://tdesign.gtimg.com/demo/demo-image-1.png',
+      width: 120,
+      height: 120,
+    } as EImageType,
   },
 ];
 const InputList: CodeComponentType[] = [
@@ -94,6 +122,11 @@ const InputList: CodeComponentType[] = [
     title: 'input',
     t_type: 't-input',
     image: 'https://tdesign.gtimg.com/site/doc/doc-input.png',
+    data: {
+      url: 'https://tdesign.gtimg.com/demo/demo-image-1.png',
+      width: 120,
+      height: 120,
+    } as EImageType,
   },
 ];
 const DesList: CodeComponentType[] = [
@@ -101,6 +134,21 @@ const DesList: CodeComponentType[] = [
     title: 'tooltip',
     t_type: 't-tooltip',
     image: 'https://tdesign.gtimg.com/site/doc/doc-tooltip.png',
+    data: {
+      url: 'https://tdesign.gtimg.com/demo/demo-image-1.png',
+      width: 120,
+      height: 120,
+    } as EImageType,
+  },
+  {
+    title: 'image',
+    t_type: 'EImage',
+    image: 'https://tdesign.gtimg.com/demo/demo-image-1.png',
+    data: {
+      url: 'https://tdesign.gtimg.com/demo/demo-image-1.png',
+      width: 120,
+      height: 120,
+    } as EImageType,
   },
 ];
 </script>
@@ -130,6 +178,7 @@ const DesList: CodeComponentType[] = [
       cursor: pointer;
       background: #e6e6e6;
       padding: 5px;
+      margin-right: 5px;
       border-radius: 5px;
       &-img {
         width: 45px;
