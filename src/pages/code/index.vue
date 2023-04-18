@@ -50,7 +50,7 @@
       </ListCard>
     </div>
     <div class="div-opr">
-      <component :is="selectItem?.t_type" :data="selectItem?.data"></component>
+      <component :is="selectItem?.t_type" :data="selectItem?.data" theme="danger">button</component>
     </div>
     <div class="div-pro">
       <div>属性编辑</div>
@@ -140,8 +140,8 @@ const InputList: CodeComponentType[] = [
 ];
 const DesList: CodeComponentType[] = [
   {
-    title: 'tooltip',
-    t_type: 't-tooltip',
+    title: 'time-picker',
+    t_type: 't-time-picker',
     image: 'https://tdesign.gtimg.com/site/doc/doc-tooltip.png',
     data: {
       url: 'https://tdesign.gtimg.com/demo/demo-image-1.png',
