@@ -100,7 +100,7 @@ onMounted(() => {
 });
 
 const selectItem = ref<CodeComponentType>({
-  title: 'tooltip',
+  title: 'button',
   t_type: 't-button',
   image: 'https://tdesign.gtimg.com/site/doc/doc-tooltip.png',
   data: {
