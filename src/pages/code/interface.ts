@@ -1,15 +1,33 @@
-// 对象,key/value都是字符串
-interface JsonObject {
-  [key: string]: string;
+// key/value 对象
+export interface KeyValueObject {
+  [key: string]: any;
 }
 
-// 定义模型对象
-export interface CodeComponentType {
-  title?: string; // 组件名
-  t_type?: any; // 组建类型:使用TDesign类型名
-  image?: string; // 组件样式
-  propertyJson?: JsonObject; // 属性对象
-  data?: any;
+// 属性对象
+export interface PropsObject {
+  [key: string]: KeyValueObject | KeyValueObject[];
+}
+
+// 组件对象
+export interface ComponentType {
+  title: string;
+  url: string;
+  type: any;
+  props: PropsObject;
+}
+
+// node对象
+export interface VNode {
+  title: string;
+  type: string;
+  props: PropsObject; // 属性对象
+  children: VNode[]; // 子对象
+}
+
+// page对象
+export interface VPage {
+  title: string;
+  children: VNode[];
 }
 
 export interface EImageType {

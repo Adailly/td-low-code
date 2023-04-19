@@ -12,7 +12,7 @@
               :key="index"
               @click="chooseItem(BaseList[index])"
             >
-              <img class="div-com-list-item-img" :src="item.image" />
+              <img class="div-com-list-item-img" :src="item.url" />
               <div class="div-com-list-item-title">{{ item.title }}</div>
             </div>
           </div>
@@ -27,7 +27,7 @@
               :key="index"
               @click="chooseItem(InputList[index])"
             >
-              <img class="div-com-list-item-img" :src="item.image" />
+              <img class="div-com-list-item-img" :src="item.url" />
               <div class="div-com-list-item-title">{{ item.title }}</div>
             </div>
           </div>
@@ -42,7 +42,7 @@
               :key="index"
               @click="chooseItem(DesList[index])"
             >
-              <img class="div-com-list-item-img" :src="item.image" />
+              <img class="div-com-list-item-img" :src="item.url" />
               <div class="div-com-list-item-title">{{ item.title }}</div>
             </div>
           </div>
@@ -50,17 +50,22 @@
       </ListCard>
     </div>
     <div class="div-opr">
-      <component :is="selectItem?.t_type" :data="selectItem?.data" theme="danger">button</component>
+      <div v-if="pageObject">
+        <div v-for="(node, index) in pageObject.children" :key="index">
+          <component :is="node.type" :data="node.props"></component>
+        </div>
+      </div>
     </div>
     <div class="div-pro">
       <div>属性编辑</div>
       <t-divider></t-divider>
-      <t-space direction="vertical">
-        <div>已选择:</div>
-        <div>组件名: {{ selectItem?.title }}</div>
-        <div>组件类型: {{ selectItem?.t_type }}</div>
+      <div v-if="selectItem">
+        <t-space direction="vertical" :size="8">
+          <div>已选择:</div>
+          <div>组件名: {{ selectItem.title }}</div>
+          <div>组件类型: {{ selectItem.type }}</div>
 
-        <div>
+          <!-- <div>
           图片地址:
           <t-input type="url" placeholder="请输入图片地址" v-model.trim="selectItem.data.url">{{
             selectItem.data.url
@@ -77,8 +82,9 @@
           <t-input type="number" placeholder="请输入图片地址" v-model.trim="selectItem.data.height">{{
             selectItem.data.height
           }}</t-input>
-        </div>
-      </t-space>
+        </div> -->
+        </t-space>
+      </div>
     </div>
   </div>
 </template>
@@ -86,7 +92,7 @@
 <script setup lang="ts">
 import { markRaw, onMounted, reactive, ref } from 'vue';
 import ListCard from './components/ListCard.vue';
-import { CodeComponentType, EImageType } from './interface';
+import { ComponentType, VPage, VNode } from './interface';
 import EImage from './components/EImage.vue';
 
 const data = reactive({
@@ -99,67 +105,100 @@ onMounted(() => {
   selectItem.value = BaseList[0];
 });
 
-const selectItem = ref<CodeComponentType>({
-  title: 'button',
-  t_type: 't-button',
-  image: 'https://tdesign.gtimg.com/site/doc/doc-tooltip.png',
-  data: {
-    url: 'https://tdesign.gtimg.com/demo/demo-image-1.png',
-    width: 120,
-    height: 120,
-  } as EImageType,
+const pageObject = ref<VPage>({
+  title: '创建的页面',
+  children: [],
 });
-const chooseItem = (item: CodeComponentType) => {
+const selectItem = ref<ComponentType>();
+const chooseItem = (item: ComponentType) => {
   selectItem.value = item;
-  console.log(item.data);
+  let node: VNode = {
+    title: item.title,
+    type: item.type,
+    props: item.props,
+    children: [],
+  };
+  pageObject.value.children.push(node);
 };
 
-const BaseList: CodeComponentType[] = [
+const BaseList: ComponentType[] = [
   {
     title: 'button',
-    t_type: 't-button',
-    image: 'https://tdesign.gtimg.com/site/doc/doc-button.png',
-    data: {
-      url: 'https://tdesign.gtimg.com/demo/demo-image-1.png',
-      width: 120,
-      height: 120,
-    } as EImageType,
+    type: 't-button',
+    url: 'https://tdesign.gtimg.com/site/doc/doc-button.png',
+    props: {
+      width: {
+        type: 'number',
+        default: '100',
+      },
+      height: {
+        type: 'number',
+        default: '100',
+      },
+    },
   },
 ];
-const InputList: CodeComponentType[] = [
-  {
-    title: 'input',
-    t_type: 't-input',
-    image: 'https://tdesign.gtimg.com/site/doc/doc-input.png',
-    data: {
-      url: 'https://tdesign.gtimg.com/demo/demo-image-1.png',
-      width: 120,
-      height: 120,
-    } as EImageType,
-  },
-];
-const DesList: CodeComponentType[] = [
+const DesList: ComponentType[] = [
   {
     title: 'time-picker',
-    t_type: 't-time-picker',
-    image: 'https://tdesign.gtimg.com/site/doc/doc-tooltip.png',
-    data: {
-      url: 'https://tdesign.gtimg.com/demo/demo-image-1.png',
-      width: 120,
-      height: 120,
-    } as EImageType,
+    type: 't-time-picker',
+    url: 'https://tdesign.gtimg.com/site/doc/doc-tooltip.png',
+    props: {
+      width: {
+        type: 'number',
+        default: '100',
+      },
+      height: {
+        type: 'number',
+        default: '100',
+      },
+    },
   },
   {
     title: 'image',
-    t_type: markRaw(EImage),
-    image: 'https://tdesign.gtimg.com/demo/demo-image-1.png',
-    data: {
-      url: 'https://tdesign.gtimg.com/demo/demo-image-1.png',
-      width: 120,
-      height: 120,
-    } as EImageType,
+    type: markRaw(EImage),
+    url: 'https://tdesign.gtimg.com/demo/demo-image-1.png',
+    props: {
+      width: {
+        type: 'number',
+        default: '200',
+      },
+      height: {
+        type: 'number',
+        default: '200',
+      },
+      url: {
+        type: 'string',
+        default: 'https://tdesign.gtimg.com/demo/demo-image-1.png',
+      },
+    },
   },
 ];
+const inputType: ComponentType = {
+  title: 'input',
+  url: 'https://tdesign.gtimg.com/site/doc/doc-input.png',
+  type: 't-input',
+  props: {
+    width: {
+      type: 'number',
+      default: '100',
+    },
+    height: {
+      type: 'number',
+      default: '100',
+    },
+    placeholder: {
+      type: 'string',
+      default: '请输入',
+    },
+    type: {
+      type: 'options',
+      default: 'text',
+      values: ['text', 'number', 'url', 'tel', 'password', 'search', 'submit', 'hidden'],
+    },
+  },
+};
+const InputList: ComponentType[] = [inputType];
 </script>
 
 <style lang="less" scoped>
