@@ -52,7 +52,7 @@
     <div class="div-opr">
       <div v-if="pageObject">
         <div v-for="(node, index) in pageObject.children" :key="index">
-          <component :is="node.type" :data="node.props"></component>
+          <component :is="node.type" :data="node.props" @click="onComponentClick(node.props)"></component>
         </div>
       </div>
     </div>
@@ -92,7 +92,7 @@
 <script setup lang="ts">
 import { markRaw, onMounted, reactive, ref } from 'vue';
 import ListCard from './components/ListCard.vue';
-import { ComponentType, VPage, VNode } from './interface';
+import { ComponentType, VPage, VNode, PropsObject } from './interface';
 import EImage from './components/EImage.vue';
 
 const data = reactive({
@@ -121,6 +121,10 @@ const chooseItem = (item: ComponentType) => {
   pageObject.value.children.push(node);
 };
 
+const onComponentClick = (props: PropsObject) => {
+  console.log(props);
+};
+
 const BaseList: ComponentType[] = [
   {
     title: 'button',
@@ -128,10 +132,12 @@ const BaseList: ComponentType[] = [
     url: 'https://tdesign.gtimg.com/site/doc/doc-button.png',
     props: {
       width: {
+        name: '宽度',
         type: 'number',
         default: '100',
       },
       height: {
+        name: '高度',
         type: 'number',
         default: '100',
       },
@@ -145,10 +151,12 @@ const DesList: ComponentType[] = [
     url: 'https://tdesign.gtimg.com/site/doc/doc-tooltip.png',
     props: {
       width: {
+        name: '宽度',
         type: 'number',
         default: '100',
       },
       height: {
+        name: '高度',
         type: 'number',
         default: '100',
       },
@@ -160,14 +168,17 @@ const DesList: ComponentType[] = [
     url: 'https://tdesign.gtimg.com/demo/demo-image-1.png',
     props: {
       width: {
+        name: '宽度',
         type: 'number',
         default: '200',
       },
       height: {
+        name: '宽度',
         type: 'number',
         default: '200',
       },
       url: {
+        name: '图片地址',
         type: 'string',
         default: 'https://tdesign.gtimg.com/demo/demo-image-1.png',
       },
@@ -180,18 +191,22 @@ const inputType: ComponentType = {
   type: 't-input',
   props: {
     width: {
+      name: '宽度',
       type: 'number',
       default: '100',
     },
     height: {
+      name: '高度',
       type: 'number',
       default: '100',
     },
     placeholder: {
+      name: '占位符',
       type: 'string',
       default: '请输入',
     },
     type: {
+      name: '类型',
       type: 'options',
       default: 'text',
       values: ['text', 'number', 'url', 'tel', 'password', 'search', 'submit', 'hidden'],
