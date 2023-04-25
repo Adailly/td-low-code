@@ -65,6 +65,12 @@
           <div>组件名: {{ selectItem.title }}</div>
           <div>组件类型: {{ selectItem.type }}</div>
 
+          <div v-for="(keyName, index) in keys(selectProps)" :key="index">
+            <div>
+              {{ selectProps[keyName]['name'] }}
+            </div>
+            <t-input v-model="selectProps[keyName]['default']"></t-input>
+          </div>
           <!-- <div>
           图片地址:
           <t-input type="url" placeholder="请输入图片地址" v-model.trim="selectItem.data.url">{{
@@ -94,6 +100,7 @@ import { markRaw, onMounted, reactive, ref } from 'vue';
 import ListCard from './components/ListCard.vue';
 import { ComponentType, VPage, VNode, PropsObject } from './interface';
 import EImage from './components/EImage.vue';
+import { keys } from 'lodash';
 
 const data = reactive({
   baseTitle: '基础组件',
@@ -119,10 +126,13 @@ const chooseItem = (item: ComponentType) => {
     children: [],
   };
   pageObject.value.children.push(node);
+  selectProps.value = item.props;
 };
 
+const selectProps = ref<PropsObject>();
 const onComponentClick = (props: PropsObject) => {
-  console.log(props);
+  console.log(keys(props));
+  selectProps.value = props;
 };
 
 const BaseList: ComponentType[] = [
