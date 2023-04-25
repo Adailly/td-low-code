@@ -51,8 +51,11 @@
     </div>
     <div class="div-opr">
       <div v-if="pageObject">
-        <div v-for="(node, index) in pageObject.children" :key="index">
-          <component :is="node.type" :data="node.props" @click="onComponentClick(node.props)"></component>
+        <div v-for="(node, index) in pageObject.children" :key="index" class="pageNode">
+          <div class="flex-between">
+            <component :is="node.type" :data="selectProps" @click="onComponentClick(node.props)"></component>
+            <t-icon name="delete" style="color: red" @click="onDeleteComponent(index)"></t-icon>
+          </div>
         </div>
       </div>
     </div>
@@ -133,6 +136,17 @@ const selectProps = ref<PropsObject>();
 const onComponentClick = (props: PropsObject) => {
   console.log(keys(props));
   selectProps.value = props;
+};
+const onDeleteComponent = (index: number) => {
+  pageObject.value.children.splice(index, 1);
+
+  const length = pageObject.value.children.length;
+  if (length > 0) {
+    const lastNode: VNode = pageObject.value.children[length - 1];
+    selectProps.value = lastNode.props;
+  } else {
+    selectProps.value = {};
+  }
 };
 
 const BaseList: ComponentType[] = [
@@ -270,6 +284,9 @@ const InputList: ComponentType[] = [inputType];
   padding: 16px;
 
   flex: 1;
+}
+.pageNode {
+  margin-bottom: 10px;
 }
 .div-pro {
   height: 100%;
